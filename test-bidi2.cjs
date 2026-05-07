@@ -1,0 +1,10 @@
+const arabicReshaper = require('arabic-reshaper');
+const bidi = require('bidi-js');
+const reshaped = arabicReshaper.convertArabic('مقدمة 123 مرحبا');
+const engine = bidi();
+const levels = engine.getEmbeddingLevels(reshaped);
+const bidiOutput = engine.getReorderedString(reshaped, levels);
+console.log('original:', 'مقدمة 123 مرحبا');
+console.log('reshaped:', reshaped);
+console.log('bidiReordered:', bidiOutput);
+console.log('reversed:', bidiOutput.split('').reverse().join(''));
