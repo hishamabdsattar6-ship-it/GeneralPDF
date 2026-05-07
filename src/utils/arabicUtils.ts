@@ -49,7 +49,9 @@ export const isArabic = (text: string): boolean => {
 export const processArabicText = async (text: string): Promise<string> => {
   if (!text || !isArabic(text)) return text;
   
-  let processedText = text;
+  // Strip Arabic diacritics (tashkeel) which often cause reshaping and PDF rendering issues (empty rectangles)
+  // \u064B to \u065F are the standard Arabic diacritics
+  let processedText = text.replace(/[\u064B-\u065F]/g, '');
   
   // 1. Reshape
   let reshapedSuccessfully = false;

@@ -36,23 +36,20 @@ export async function askGemini({
   const config: any = {};
   if (systemInstruction) config.systemInstruction = systemInstruction;
 
-  if (history && history.length > 0) {
-    // We didn't actually implement startChat mapping from the provided history format, 
-    // but we can map the prompt if needed, or simply pass contents. 
-    // Actually the aiService doesn't use history anyway.
+  try {
     const response = await ai.models.generateContent({
       model,
       contents: { parts },
       config,
     });
     return response.text;
-  } else {
-    const response = await ai.models.generateContent({
-      model,
-      contents: { parts },
-      config,
-    });
-    return response.text;
+  } catch (error: any) {
+    console.error("Gemini API Error:", error?.message || error);
+    if (error?.message?.includes("503") || error?.message?.includes("UNAVAILABLE") || error?.status === 503) {
+      throw new Error("عذراً، يوجد ضغط كبير على خوادم الذكاء الاصطناعي حالياً (الخدمة غير متاحة مؤقتاً). يرجى المحاولة مرة أخرى بعد قليل.");
+    }
+    throw new Error(error?.message || "حدث خطأ أثناء التواصل مع نموذج الذكاء الاصطناعي.");
   }
 }
+
 

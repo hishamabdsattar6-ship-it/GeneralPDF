@@ -34,10 +34,18 @@ export const arabicChars = {
   'ة': ['\uFE93', '\uFE94', '\uFE93', '\uFE94'],
   'ئ': ['\uFE89', '\uFE8A', '\uFE8B', '\uFE8C'],
   'ؤ': ['\uFE85', '\uFE86', '\uFE85', '\uFE86'],
+  'ء': ['\uFE80', '\uFE80', '\uFE80', '\uFE80'],
+  // Add Persian letters used often in AI outputs
+  'ی': ['\uFBFC', '\uFBFD', '\uFBFE', '\uFBFF'],
+  'ک': ['\uFB8E', '\uFB8F', '\uFB90', '\uFB91'],
+  'گ': ['\uFB92', '\uFB93', '\uFB94', '\uFB95'],
+  'چ': ['\uFB7A', '\uFB7B', '\uFB7C', '\uFB7D'],
+  'پ': ['\uFB56', '\uFB57', '\uFB58', '\uFB59'],
+  'ژ': ['\uFB8A', '\uFB8B', '\uFB8A', '\uFB8B'],
 };
 
 // letters that DO NOT connect to the left
-export const rightConnecting = ['ا', 'أ', 'إ', 'آ', 'د', 'ذ', 'ر', 'ز', 'و', 'ؤ', 'ة', 'ى'];
+export const rightConnecting = ['ا', 'أ', 'إ', 'آ', 'د', 'ذ', 'ر', 'ز', 'و', 'ؤ', 'ة', 'ى', 'ء', 'ژ'];
 
 export function customReshape(text: string): string {
   let res = '';

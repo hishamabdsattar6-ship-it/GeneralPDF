@@ -25,9 +25,10 @@ class AIService {
   async generateResponse(prompt: string, context?: string): Promise<string> {
     try {
       const currentProvider = this.provider;
+      const pdfSafeConstraint = "IMPORTANT: Do NOT use emojis, unusual unicode symbols, or custom icons. Only use standard numbers, standard Arabic/English characters, standard punctuation, and ASCII dash (-) for bullet points. This text will be rendered in a PDF with limited font fallback.";
 
       if (currentProvider === 'gemini') {
-        const fullPrompt = context ? `Context: ${context}\n\nQuestion: ${prompt}` : prompt;
+        const fullPrompt = context ? `Context: ${context}\n\nConstraint: ${pdfSafeConstraint}\n\nQuestion: ${prompt}` : `${pdfSafeConstraint}\n\nTask: ${prompt}`;
         const text = await askGemini({ prompt: fullPrompt });
         return text || "No response generated";
       } else {
@@ -54,9 +55,10 @@ class AIService {
     try {
       const env = (import.meta as any).env || {};
       const currentProvider = (env.VITE_AI_PROVIDER as AIProvider) || 'gemini';
+      const pdfSafeConstraint = "IMPORTANT: Do NOT use emojis, unusual unicode symbols, or custom icons. Only use standard numbers, standard Arabic/English characters, standard punctuation, and ASCII dash (-) for bullet points. This text will be rendered in a PDF with limited font fallback.";
 
       if (currentProvider === 'gemini') {
-        const fullPrompt = context ? `Context: ${context}\n\nTask: ${prompt}` : prompt;
+        const fullPrompt = context ? `Context: ${context}\n\nConstraint: ${pdfSafeConstraint}\n\nTask: ${prompt}` : `${pdfSafeConstraint}\n\nTask: ${prompt}`;
         const text = await askGemini({ prompt: fullPrompt, images });
         return text || "No response generated";
       } else {

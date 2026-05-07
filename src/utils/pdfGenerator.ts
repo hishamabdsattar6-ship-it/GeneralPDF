@@ -272,6 +272,26 @@ export async function drawParagraph(
 export const drawTextWithWordWrap = async (options: WordWrapOptions) => {
   let { page, pdfDoc, font, fontSize, color, text, xOffset, startY, maxWidth, lineHeight, pageWidth, pageHeight, headerTitle, language = 'ar', themeColor, headerColor, borderStyle } = options;
 
+  // Sanitize text to remove unsupported glyphs (like emojis) and normalize bullets/dashes
+  const sanitizeText = (str: string) => {
+    return str
+      .replace(/[•◦▪●]/g, '-') // Replace unicode bullets with dash
+      .replace(/[—–]/g, '-') // Replace em/en dashes with regular dash
+      .replace(/[\u{1F600}-\u{1F64F}]/gu, '') // Emoticons
+      .replace(/[\u{1F300}-\u{1F5FF}]/gu, '') // Misc Symbols and Pictographs
+      .replace(/[\u{1F680}-\u{1F6FF}]/gu, '') // Transport and Map
+      .replace(/[\u{1F700}-\u{1F77F}]/gu, '') // Alchemical Symbols
+      .replace(/[\u{1F780}-\u{1F7FF}]/gu, '') // Geometric Shapes Extended
+      .replace(/[\u{1F800}-\u{1F8FF}]/gu, '') // Supplemental Arrows-C
+      .replace(/[\u{1F900}-\u{1F9FF}]/gu, '') // Supplemental Symbols and Pictographs
+      .replace(/[\u{1FA00}-\u{1FA6F}]/gu, '') // Chess Symbols
+      .replace(/[\u{1FA70}-\u{1FAFF}]/gu, '') // Symbols and Pictographs Extended-A
+      .replace(/[\u{2600}-\u{26FF}]/gu, '') // Misc symbols
+      .replace(/[\u{2700}-\u{27BF}]/gu, ''); // Dingbats
+  };
+
+  const sanitizedText = sanitizeText(text);
+
   let currentY = startY;
   let pageNum = 1;
 
@@ -281,7 +301,7 @@ export const drawTextWithWordWrap = async (options: WordWrapOptions) => {
   // Use a fixed spacing for readability
   const standardLineHeight = fontSize * 1.5;
 
-  const paragraphs = text.split(/\n+/).filter(p => p.trim() !== '');
+  const paragraphs = sanitizedText.split(/\n+/).filter(p => p.trim() !== '');
 
   for (let i = 0; i < paragraphs.length; i++) {
     const paragraph = paragraphs[i];
